@@ -110,7 +110,7 @@ function update() {
 function animate() {
   window.requestAnimationFrame(animate);
   update();
-  sleep(0);
+  sleep(10);
 }
 // Inital rendering
 renderArray(barArray);
