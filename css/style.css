@@ -1,0 +1,36 @@
+body {
+  background-color: black;
+}
+
+main {
+  padding-left: 220px;
+  padding-top: 40px;
+}
+
+canvas {
+  background-color: rgb(131, 179, 203);
+  border: solid rgb(54, 105, 119) 2px;
+}
+
+.menu {
+  background-color: rgb(131, 179, 203);
+  width: 200px;
+  height: 600px;
+  border: solid rgb(54, 105, 119) 2px;
+  float: left;
+}
+
+.button {
+  border: solid rgb(54, 105, 119) 2px;
+}
+
+p {
+  color: white;
+}
+
+.button>p {
+  font-family: Arial;
+  color: white;
+  text-align: center;
+  font-style: bold;
+}
