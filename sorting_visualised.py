@@ -6,7 +6,6 @@ from random import shuffle
 BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
-BLUE  = (  0,   0, 255)
 
 unsorted = [x * 5 for x in range(1, 80)]
 shuffle(unsorted)
@@ -118,8 +117,10 @@ def selection_sort():
         for j in range(i, len(unsorted)):
             update([i, j, small])
             if unsorted[j] < unsorted[small]:
+                stats[0] += 1
                 small = j
         unsorted[i], unsorted[small] = unsorted[small], unsorted[i]
+        stats[1] += 3
     sorting_type = None
 
 def bubble_sort():
@@ -136,30 +137,60 @@ def bubble_sort():
         s_length -=1
     sorting_type = None
 
+def coctail_sort():
+    global sorting_type
+    s_length = len(unsorted) - 1
+    s_min = 0
+    alt = False
+    while s_length > s_min:
+        if alt: # Decending
+            for j in range(s_length, s_min, -1):
+                update([j])
+                if unsorted[j - 1] > unsorted[j]:
+                    unsorted[j], unsorted[j - 1] = unsorted[j - 1], unsorted[j]
+            s_min += 1
+            alt = False
+        else: # Ascending
+            for j in range(s_min, s_length):
+                update([j])
+                if unsorted[j] > unsorted[j + 1]:
+                    unsorted[j], unsorted[j + 1] = unsorted[j + 1], unsorted[j]
+            s_length -=1
+            alt = True
+    sorting_type = None
+
 def help_me():
-    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection"]
-    print("Availible sorting algorithms:")
+    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail"]
+    print("Availible sorting algorithms:\n-----------------------------")
     for command in availible_commands:
         print(command)
-    print("Enter one of the availible commands below to run that algorithm")
+    print("-----------------------------\nEnter one of the availible commands below to run that algorithm")
 
 def set_alg(alg):
     global sorting_type
     global unsorted
-    sorting_type = alg + " Sort"
+    stats[0] = 0
+    stats[1] = 0
+    sorting_type = alg.lower() + " sort"
+    sorting_type = sorting_type.title()
 
 def get_sorter():
-    command = input(">>> ")
-    if command != "help":
-        set_alg(command)
-    else:
+    command = input(">>> ").lower()
+    if command == "help":
         help_me()
+    elif command == "shuffle":
+        shuffle(unsorted)
+    elif command == "exit":
+        return True
+    else:
+        set_alg(command)
 
 
 sorting_type = None
 
 while not update([]):
-    get_sorter()
+    if get_sorter():
+        break
     if sorting_type == "Gnome Sort":
         gnome_sort()
     elif sorting_type == "Insertion Sort":
@@ -168,3 +199,7 @@ while not update([]):
         selection_sort()
     elif sorting_type == "Bubble Sort":
         bubble_sort()
+    elif sorting_type == "Coctail Sort":
+        coctail_sort()
+
+pygame.quit()
