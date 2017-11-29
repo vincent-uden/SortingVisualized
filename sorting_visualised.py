@@ -7,16 +7,20 @@ BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
 
+# Setting up important variables
 unsorted = [x * 5 for x in range(1, 80)]
 shuffle(unsorted)
 global highlighted
 global sorting_type
-sorters = ["Gnome Sort", "Insertion Sort"]
 pygame.init()
-#  Comparisons - Array accesses
+#  stats = [Comparisons, Array accesses]
 stats = [0, 0]
 
 class Screen_text(object):
+    """
+    Wrapper class for pygame.font. 
+    Used for easier syntax and method aliasing.
+    """
 
     def __init__(self, text, pos):
         self.font = pygame.font.SysFont("Calibri", 25, True, False)
@@ -34,6 +38,10 @@ stats_text = Screen_text(f"Comparisons: {stats[0]}     Array Accesses: {stats[1]
 
 
 def draw_list(array):
+    """
+    Draws input list onto the pygame window.
+    Used for rendering the list during sorting.
+    """
     offset = 10
     bar_width = 10
     gap = 5
@@ -45,15 +53,19 @@ def draw_list(array):
             pygame.draw.rect(screen, WHITE, [offset, y_pos - bar, bar_width, bar])
         offset += bar_width + gap
 
+# Setting up the pygame window and making it not resizable
 size = (1200, 600)
 screen = pygame.display.set_mode(size)
-
 pygame.display.set_caption("Sorting Visualized")
 
 done = False
 clock = pygame.time.Clock()
 
 def update(highlights):
+    """
+    Updates important variables and calls important methods for updating the pygame screen.
+    Also draws everything except for the unsorted list. ( Although it calls the draw_list() function)
+    """
     global highlighted
     highlighted = highlights
     for event in pygame.event.get():
@@ -73,6 +85,9 @@ def update(highlights):
 
 
 def gnome_sort():
+    """
+    Sorts unsorted while updating the screen during every iteration.
+    """
     i = 0
     while True:
         if update([i, i- 1]):
@@ -96,6 +111,9 @@ def gnome_sort():
             i+=1
 
 def insertion_sort():
+    """
+    Sorts unsorted while updating the screen during every iteration.
+    """
     global sorting_type
     for i in range(1,len(unsorted)):
         j = i
@@ -111,6 +129,9 @@ def insertion_sort():
     sorting_type = None
 
 def selection_sort():
+    """
+    Sorts unsorted while updating the screen during every iteration.
+    """
     global sorting_type
     for i in range(0, len(unsorted)):
         small = i
@@ -124,6 +145,9 @@ def selection_sort():
     sorting_type = None
 
 def bubble_sort():
+    """
+    Sorts unsorted while updating the screen during every iteration.
+    """
     global sorting_type
     s_length = len(unsorted) - 1
     while s_length > 0:
@@ -138,6 +162,10 @@ def bubble_sort():
     sorting_type = None
 
 def coctail_sort():
+    """
+    Sorts unsorted while updating the screen during every iteration.
+    Basically a bi-directional bubble sort.
+    """
     global sorting_type
     s_length = len(unsorted) - 1
     s_min = 0
@@ -164,6 +192,10 @@ def coctail_sort():
     sorting_type = None
 
 def help_me():
+    """
+    Prints availible sorting algorithms.
+    Called by get_command().
+    """
     availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail"]
     print("Availible sorting algorithms:\n-----------------------------")
     for command in availible_commands:
@@ -171,6 +203,10 @@ def help_me():
     print("-----------------------------\nEnter one of the availible commands below to run that algorithm")
 
 def set_alg(alg):
+    """
+    Sets sorting_type to the appropriate string based on the input.
+    Called by get_command().
+    """
     global sorting_type
     global unsorted
     stats[0] = 0
@@ -178,7 +214,11 @@ def set_alg(alg):
     sorting_type = alg.lower() + " sort"
     sorting_type = sorting_type.title()
 
-def get_sorter():
+def get_command():
+    """
+    Gets the desired action from the user..
+    Then calls the appropriate function for that purpose.
+    """
     command = input(">>> ").lower()
     if command == "help":
         help_me()
@@ -191,9 +231,9 @@ def get_sorter():
 
 
 sorting_type = None
-
+# Main loop that drives the program until exited
 while not update([]):
-    if get_sorter():
+    if get_command():
         break
     if sorting_type == "Gnome Sort":
         gnome_sort()
@@ -205,5 +245,5 @@ while not update([]):
         bubble_sort()
     elif sorting_type == "Coctail Sort":
         coctail_sort()
-
+# Safely quitting pygame without causing exception
 pygame.quit()
