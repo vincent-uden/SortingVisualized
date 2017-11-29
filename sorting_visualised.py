@@ -142,18 +142,22 @@ def coctail_sort():
     s_length = len(unsorted) - 1
     s_min = 0
     alt = False
-    while s_length > s_min:
+    swapped = True
+    while s_length > s_min and swapped:
+        swapped = False
         if alt: # Decending
             for j in range(s_length, s_min, -1):
-                update([j])
+                update([j, j - 1])
                 if unsorted[j - 1] > unsorted[j]:
+                    swapped = True
                     unsorted[j], unsorted[j - 1] = unsorted[j - 1], unsorted[j]
             s_min += 1
             alt = False
         else: # Ascending
             for j in range(s_min, s_length):
-                update([j])
+                update([j, j + 1])
                 if unsorted[j] > unsorted[j + 1]:
+                    swapped = True
                     unsorted[j], unsorted[j + 1] = unsorted[j + 1], unsorted[j]
             s_length -=1
             alt = True
