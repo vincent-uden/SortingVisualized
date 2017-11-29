@@ -33,7 +33,7 @@ class Screen_text(object):
     def update(self, new_text):
         self.screen_text = self.font.render(new_text, True, WHITE)
 
-sorter = Screen_text(f"Sorter: {sorters[0]}", (10, 10))
+sorter = Screen_text(f"Sorter: None", (10, 10))
 stats_text = Screen_text(f"Comparisons: {stats[0]}     Array Accesses: {stats[1]}", (300, 10))
 
 
