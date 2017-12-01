@@ -191,6 +191,56 @@ def coctail_sort():
             alt = True
     sorting_type = None
 
+def get_parent_index(node):
+    return math.floor(node / 2 - 0.5)
+
+def heapify_node(node, array):
+    global stats
+    i = node
+    while i > 0:
+        if array[i] > array[get_parent_index(i)]:
+            array[i], array[get_parent_index(i)] = array[get_parent_index(i)], array[i]
+            update([i, get_parent_index(i)])
+            stats[0] += 1
+            stats[1] += 5
+            i = get_parent_index(i)
+        else:
+            break
+
+def heapify_heap(array, partition):
+    n = partition
+    while n > 0:
+        heapify_node(n, array)
+        n -= 1
+
+def test_heap(array, partition):
+    global stats
+    i = partition
+    while i > 0:
+        if array[i] > array[get_parent_index(i)]:
+            stats[0] += 1
+            stats[1] += 2
+            return False
+        i -= 1
+    return True
+
+def heapify(array, partition):
+    while test_heap(unsorted, partition) != True:
+        heapify_heap(unsorted, partition)
+
+def heap_sort():
+    global sorting_type
+    global stats
+    heap_end = len(unsorted) - 1
+    heapify(unsorted, heap_end)
+    new_arr = []
+    while heap_end >= 0:
+        unsorted[0], unsorted[heap_end] = unsorted[heap_end], unsorted[0]
+        stats[1] += 3
+        heapify(unsorted, heap_end - 1)
+        heap_end -= 1
+    sorting_type = None
+
 def help_me():
     """
     Prints availible sorting algorithms.
@@ -245,5 +295,7 @@ while not update([]):
         bubble_sort()
     elif sorting_type == "Coctail Sort":
         coctail_sort()
+    elif sorting_type == "Heap Sort":
+        heap_sort()
 # Safely quitting pygame without causing exception
 pygame.quit()
