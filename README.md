@@ -11,3 +11,4 @@ This file contains several sorting algorithms and the pygame methods used to dis
 - Selection sort
 - Bubble sort
 - Coctail sort
+- Heap sort

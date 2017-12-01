@@ -246,7 +246,7 @@ def help_me():
     Prints availible sorting algorithms.
     Called by get_command().
     """
-    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail"]
+    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail", "Heap"]
     print("Availible sorting algorithms:\n-----------------------------")
     for command in availible_commands:
         print(command)
