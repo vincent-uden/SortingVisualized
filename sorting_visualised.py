@@ -192,9 +192,16 @@ def coctail_sort():
     sorting_type = None
 
 def get_parent_index(node):
+    """
+    Finds the index of the parent node for a given node.
+    Used for heapifying.
+    """
     return math.floor(node / 2 - 0.5)
 
 def heapify_node(node, array):
+    """
+    Places one node into its correct position by swapping it with every smaller parent node.
+    """
     global stats
     i = node
     while i > 0:
@@ -208,12 +215,20 @@ def heapify_node(node, array):
             break
 
 def heapify_heap(array, partition):
+    """
+    Heapifies every node in the list.
+    """
+    # Heapifies from end to start
     n = partition
     while n > 0:
         heapify_node(n, array)
         n -= 1
 
 def test_heap(array, partition):
+    """
+    Returns whether a partition of a list is following a max heap structure or not.
+    The partition is from the start of the list to the partition index.
+    """
     global stats
     i = partition
     while i > 0:
@@ -225,10 +240,19 @@ def test_heap(array, partition):
     return True
 
 def heapify(array, partition):
+    """
+    Repeatedly calls heapify_heap if the list is not already a heap.
+    """
+    # Heapify_heap isn't always enough to create a heap
+    # Sometimes smaller node are shifted down from positions higher up which aren't caught on the first try
+    # This is semi-inefficient but it works for now
     while test_heap(unsorted, partition) != True:
         heapify_heap(unsorted, partition)
 
 def heap_sort():
+    """
+    Sorts the list by removing the root node from the heap, replacing it with the last node and re-heapifying.
+    """
     global sorting_type
     global stats
     heap_end = len(unsorted) - 1
@@ -238,6 +262,7 @@ def heap_sort():
         unsorted[0], unsorted[heap_end] = unsorted[heap_end], unsorted[0]
         stats[1] += 3
         heapify(unsorted, heap_end - 1)
+        # Shrinking the heap to exclude already correctly placed items
         heap_end -= 1
     sorting_type = None
 
