@@ -138,8 +138,9 @@ def selection_sort():
         for j in range(i, len(unsorted)):
             update([i, j, small])
             if unsorted[j] < unsorted[small]:
-                stats[0] += 1
                 small = j
+            stats[0] += 1
+            stats[1] += 2
         unsorted[i], unsorted[small] = unsorted[small], unsorted[i]
         stats[1] += 3
     sorting_type = None
@@ -266,6 +267,36 @@ def heap_sort():
         heap_end -= 1
     sorting_type = None
 
+def counting_sort():
+    """
+    Counts the numbers in the list a few times and then places them in the right place.
+    Really fast on this small data set.
+    Only works for positive integers but since we only have that here it works amazing.
+    """
+    global sorting_type
+    k = max(unsorted) + 1
+    freq = {n:0 for n in range(k)}
+    total = 0
+    # Count numbers
+    for number in range(len(unsorted)):
+        freq[unsorted[number]] += 1
+        stats[1] += 1
+        update([number])
+    # Converting to positional index
+    for i in range(len(freq)):
+        stats[1] += 2
+        old_count = freq[i]
+        freq[i] = total
+        total += old_count
+    # Placing items
+    copy = unsorted[::]
+    for i in copy:
+        update([i])
+        unsorted[freq[i]] = i
+        stats[1] += 2
+        freq[i] += 1
+    sorting_type = None
+
 def help_me():
     """
     Prints availible sorting algorithms.
@@ -322,5 +353,7 @@ while not update([]):
         coctail_sort()
     elif sorting_type == "Heap Sort":
         heap_sort()
+    elif sorting_type == "Counting Sort":
+        counting_sort()
 # Safely quitting pygame without causing exception
 pygame.quit()
