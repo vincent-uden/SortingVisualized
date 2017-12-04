@@ -52,6 +52,31 @@ def draw_list(array):
         else:
             pygame.draw.rect(screen, WHITE, [offset, y_pos - bar, bar_width, bar])
         offset += bar_width + gap
+    
+def draw_heap(array, partition):
+    offset = 10
+    bar_width = 10
+    gap = 5
+    y_pos = 595
+    for index, bar in enumerate(array):
+        if index > partition:
+            pygame.draw.rect(screen, WHITE, [offset, y_pos - bar, bar_width, bar])
+        elif index == 0:
+            pygame.draw.rect(screen, (66, 134, 244), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 2:
+            pygame.draw.rect(screen, (244, 223, 65), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 6:
+            pygame.draw.rect(screen, (244, 65, 65), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 14:
+            pygame.draw.rect(screen, (103, 65, 244), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 30:
+            pygame.draw.rect(screen, (244, 65, 190), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 62:
+            pygame.draw.rect(screen, (110, 239, 146), [offset, y_pos - bar, bar_width, bar])
+        else:
+            pygame.draw.rect(screen, (110, 0, 146), [offset, y_pos - bar, bar_width, bar])
+        offset += bar_width + gap
+        
 
 # Setting up the pygame window and making it not resizable
 size = (1200, 600)
@@ -61,7 +86,7 @@ pygame.display.set_caption("Sorting Visualized")
 done = False
 clock = pygame.time.Clock()
 
-def update(highlights):
+def update(highlights, array=unsorted, partition=0):
     """
     Updates important variables and calls important methods for updating the pygame screen.
     Also draws everything except for the unsorted list. ( Although it calls the draw_list() function)
@@ -73,7 +98,10 @@ def update(highlights):
             pygame.quit()
             return True
     screen.fill(BLACK)
-    draw_list(unsorted)
+    if sorting_type == "Heap Sort":
+        draw_heap(array, partition)
+    else:
+        draw_list(unsorted)
 
     sorter.update(f"Sorter: {sorting_type}")
     sorter.draw()
@@ -81,7 +109,7 @@ def update(highlights):
     stats_text.draw()
 
     pygame.display.flip()
-    x = clock.tick(100)
+    x = clock.tick(50)
 
 
 def gnome_sort():
@@ -199,7 +227,7 @@ def get_parent_index(node):
     """
     return math.floor(node / 2 - 0.5)
 
-def heapify_node(node, array):
+def heapify_node(node, array, partition):
     """
     Places one node into its correct position by swapping it with every smaller parent node.
     """
@@ -208,7 +236,7 @@ def heapify_node(node, array):
     while i > 0:
         if array[i] > array[get_parent_index(i)]:
             array[i], array[get_parent_index(i)] = array[get_parent_index(i)], array[i]
-            update([i, get_parent_index(i)])
+            update([i, get_parent_index(i)], unsorted, partition)
             stats[0] += 1
             stats[1] += 5
             i = get_parent_index(i)
@@ -222,7 +250,7 @@ def heapify_heap(array, partition):
     # Heapifies from end to start
     n = partition
     while n > 0:
-        heapify_node(n, array)
+        heapify_node(n, array, partition)
         n -= 1
 
 def test_heap(array, partition):
