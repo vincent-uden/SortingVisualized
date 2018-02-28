@@ -109,7 +109,7 @@ def update(highlights, array=unsorted, partition=0):
     stats_text.draw()
 
     pygame.display.flip()
-    x = clock.tick(50)
+    x = clock.tick(20)
 
 
 def gnome_sort():
@@ -325,6 +325,31 @@ def counting_sort():
         freq[i] += 1
     sorting_type = None
 
+def quick_sort(arr):
+    global sorting_type
+    def quick(arr, low, high):
+        def partition(arr, low, high):
+            pivot = arr[(low + high) // 2]
+            while low <= high:
+                while arr[low] < pivot:
+                    low += 1
+                while arr[high] > pivot:
+                    high -= 1
+                if low <= high:
+                    update([low, high])
+                    arr[low], arr[high] = arr[high], arr[low]
+                    low += 1
+                    high -= 1
+            return low
+        index = partition(arr, low, high)
+        if low < index - 1:
+            quick(arr, low, index - 1)
+        if index < high:
+            quick(arr, index, high)
+    quick(arr, 0, len(arr) - 1)
+    sorting_type = None
+    return arr
+
 def help_me():
     """
     Prints availible sorting algorithms.
@@ -383,5 +408,8 @@ while not update([]):
         heap_sort()
     elif sorting_type == "Counting Sort":
         counting_sort()
+    elif sorting_type == "Quick Sort":
+        quick_sort(unsorted)
 # Safely quitting pygame without causing exception
 pygame.quit()
+
