@@ -109,7 +109,7 @@ def update(highlights, array=unsorted, partition=0):
     stats_text.draw()
 
     pygame.display.flip()
-    x = clock.tick(20)
+    x = clock.tick(60)
 
 
 def gnome_sort():
@@ -350,12 +350,61 @@ def quick_sort(arr):
     sorting_type = None
     return arr
 
+def merge(arr, start, middle, end):
+    # Left arr head
+    i = start
+    # Right arr head
+    j = middle
+
+    tmp_arr = [None] * len(arr)
+
+    for k in range(start, end):
+        update([k, j, i])
+        # I måste vara mindra än middle annars är man i fel del array
+        # Annars tar man right head
+        if i < middle:
+            # J måste faktiskt vara i arrayen
+            if j < end:
+                # Left head ska vara mindre än right head
+                if arr[i] < arr[j]:
+                    tmp_arr[k] = arr[i]
+                    i += 1
+                else:
+                    tmp_arr[k] = arr[j]
+                    j += 1
+            else:
+                tmp_arr[k] = arr[i]
+                i += 1
+        else:
+            tmp_arr[k] = arr[j]
+            j += 1
+    # Skriv över biten av arr som har mergats
+    for index in range(start, end):
+        update([index])
+        arr[index] = tmp_arr[index]
+
+def merge_split(arr, start, end):
+    if end - start < 2:
+        return
+    middle = (end - start) // 2 + start
+
+    merge_split(arr, start, middle)
+    merge_split(arr, middle, end)
+
+    merge(arr, start, middle, end) 
+
+def merge_sort(arr):
+    global sorting_type
+    merge_split(arr, 0, len(arr))
+    sorting_type = None
+
+
 def help_me():
     """
     Prints availible sorting algorithms.
     Called by get_command().
     """
-    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail", "Heap", "Counting"]
+    availible_commands = ["Bubble", "Gnome", "Insertion", "Selection", "Coctail", "Heap", "Counting", "Quick", "Merge"]
     print("Availible sorting algorithms:\n-----------------------------")
     for command in availible_commands:
         print(command)
@@ -410,6 +459,8 @@ while not update([]):
         counting_sort()
     elif sorting_type == "Quick Sort":
         quick_sort(unsorted)
+    elif sorting_type == "Merge Sort":
+        merge_sort(unsorted)
 # Safely quitting pygame without causing exception
 pygame.quit()
 
