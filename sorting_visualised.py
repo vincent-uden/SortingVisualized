@@ -7,8 +7,12 @@ BLACK = (  0,   0,   0)
 WHITE = (255, 255, 255)
 RED   = (255,   0,   0)
 
+BAR_WIDTH = 2
+GAP = 2
+FPS = 1200
+
 # Setting up important variables
-unsorted = [x * 5 for x in range(1, 80)]
+unsorted = [x * 2 for x in range(1, 298)]
 shuffle(unsorted)
 global highlighted
 global sorting_type
@@ -43,9 +47,9 @@ def draw_list(array):
     Used for rendering the list during sorting.
     """
     offset = 10
-    bar_width = 10
-    gap = 5
-    y_pos = 595
+    bar_width = BAR_WIDTH
+    gap = GAP
+    y_pos = 695
     for index, bar in enumerate(array):
         if index in highlighted:
             pygame.draw.rect(screen, RED, [offset, y_pos - bar, bar_width, bar])
@@ -55,9 +59,9 @@ def draw_list(array):
     
 def draw_heap(array, partition):
     offset = 10
-    bar_width = 10
-    gap = 5
-    y_pos = 595
+    bar_width = BAR_WIDTH
+    gap = GAP
+    y_pos = 695
     for index, bar in enumerate(array):
         if index > partition:
             pygame.draw.rect(screen, WHITE, [offset, y_pos - bar, bar_width, bar])
@@ -73,13 +77,17 @@ def draw_heap(array, partition):
             pygame.draw.rect(screen, (244, 65, 190), [offset, y_pos - bar, bar_width, bar])
         elif index <= 62:
             pygame.draw.rect(screen, (110, 239, 146), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 126:
+            pygame.draw.rect(screen, (  0, 178, 255), [offset, y_pos - bar, bar_width, bar])
+        elif index <= 254:
+            pygame.draw.rect(screen, (  0, 178, 0), [offset, y_pos - bar, bar_width, bar])
         else:
             pygame.draw.rect(screen, (110, 0, 146), [offset, y_pos - bar, bar_width, bar])
         offset += bar_width + gap
         
 
 # Setting up the pygame window and making it not resizable
-size = (1200, 600)
+size = (1200, 700)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Sorting Visualized")
 
@@ -109,7 +117,7 @@ def update(highlights, array=unsorted, partition=0):
     stats_text.draw()
 
     pygame.display.flip()
-    x = clock.tick(60)
+    x = clock.tick(FPS)
 
 
 def gnome_sort():
