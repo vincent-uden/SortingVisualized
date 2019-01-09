@@ -13,3 +13,5 @@ This file contains several sorting algorithms and the pygame methods used to dis
 - Coctail sort
 - Heap sort
 - Counting sort
+- Quick sort
+- Merge sort
